@@ -25,6 +25,11 @@ namespace AWSExamenJavierAlonso.Repositories
 
         public async Task InsertZapatillaAsync(Zapatilla zapatilla, IFormFile file)
         {
+            int maxId = await this.context.Zapatillas.AnyAsync() 
+                ? await this.context.Zapatillas.MaxAsync(z => z.IDProducto) 
+                : 0;
+            zapatilla.IDProducto = maxId + 1;
+
             this.context.Zapatillas.Add(zapatilla);
             //la imagen de la zapatilla debe ser guardada en el bucket de s3 y el nombre del archivo se guardará en la propiedad Imagen de la zapatilla
             string fileName = file.FileName;
