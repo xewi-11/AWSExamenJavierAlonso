@@ -13,7 +13,7 @@ namespace AWSExamenJavierAlonso.Helpers
         public static async Task<string> GetSecretAsync()
         {
             string secretName = "datasecrets";
-            string region = "us-east-1";
+            string region = "us-east-2";
 
             IAmazonSecretsManager client = new AmazonSecretsManagerClient(RegionEndpoint.GetBySystemName(region));
 
