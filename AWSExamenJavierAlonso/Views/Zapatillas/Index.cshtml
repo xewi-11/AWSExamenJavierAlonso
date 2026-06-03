@@ -1,0 +1,26 @@
+@model IEnumerable<AWSExamenJavierAlonso.Models.Zapatilla>
+
+@{
+    ViewData["Title"] = "Zapatillas";
+    string bucketUrl = configuration.GetValue<string>("AWS:BucketUrl");
+}
+
+<h1>Zapatillas</h1>
+
+<p>
+    <a asp-action="CreateZapatilla" class="btn btn-primary">Crear nueva zapatilla</a>
+</p>
+
+<div class="row">
+    @foreach (var item in Model) {
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <img src="@bucketUrl@item.Imagen" class="card-img-top" alt="@item.Nombre">
+                <div class="card-body">
+                    <h5 class="card-title">@item.Nombre</h5>
+                    <p class="card-text">@item.Descripcion</p>
+                </div>
+            </div>
+        </div>
+    }
+</div>
