@@ -1,18 +1,33 @@
 using Amazon.S3;
 using AWSExamenJavierAlonso.Data;
+using AWSExamenJavierAlonso.Helpers;
+using AWSExamenJavierAlonso.Models;
 using AWSExamenJavierAlonso.Repositories;
 using AWSExamenJavierAlonso.Services;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 var builder = WebApplication.CreateBuilder(args);
+
+string misecret = await HelperSecretManager.GetSecretAsync();
+
+//mapeamos el string con nuestro model
+
+KeysModel model = JsonConvert.DeserializeObject<KeysModel>(misecret);
+var provider = new ServiceCollection()
+    .AddSingleton<KeysModel>(x => model)
+    .BuildServiceProvider();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<ZapatillasContext>(options =>
-    options.UseMySQL(builder.Configuration.GetConnectionString("AwsBD")));
+    options.UseMySQL(model.AwsBD));
 builder.Services.AddAWSService<IAmazonS3>();
 builder.Services.AddTransient<ServiceStorageS3>();
 builder.Services.AddTransient<RepositoryZapatillas>();
+
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
